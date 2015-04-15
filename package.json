@@ -1,0 +1,20 @@
+{
+  "name": "olw-download",
+  "version": "1.0.0",
+  "description": "work in progress stuff",
+  "main": "get-video-data.js",
+  "dependencies": {
+    "q": "^1.2.0",
+    "ramda": "^0.13.0",
+    "request-promise": "^0.4.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "olw"
+  ],
+  "author": "David Gengenbach",
+  "license": "ISC"
+}
