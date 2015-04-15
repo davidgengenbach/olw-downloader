@@ -79,7 +79,10 @@ Q(OLW_LINK)
         videoData.downloadFilename = filename;
         return videoData;
     }))
-    .invoke('slice', 0, 2)
+
+    // Just download the first 2 items
+    //.invoke('slice', 0, 2)
+
     .then(R.map(function(videoData) {
         if (fs.existsSync(videoData.downloadFilename)) {
             console.log("--> already downloaded:", videoData.name, videoData.downloadFilename)
