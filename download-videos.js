@@ -6,7 +6,14 @@ var Q = require('q'),
     fs = require('fs'),
     R = require('ramda');
 
-var OLW_LINK = "https://openlearnware.tu-darmstadt.de/#!/collection/mathematik-ii-fur-informatik-und-wirtschaftsinformatik-3";
+var OLW_LINK;
+
+if(process.argv[2]) {
+    OLW_LINK = process.argv[2];
+} else {
+    console.error('Please specify a url like: node download-videos.js \'COLLECTION_URL\'\n (don\'t forget the "\'")');
+    process.exit(0);
+}
 
 // Temp variables...
 var VIDEO_DATA,
