@@ -36,9 +36,19 @@ Q(OLW_LINK)
         COLLECTION_DATA = data;
         COLLECTION_NAME = helper.sanitizeFileName(COLLECTION_DATA.name);
     })
+
+    // Prepare the folder the files should be downloaded into
+    .tap(function() {
+        try {
+            fs.mkdirSync(config.DOWNLOAD_FOLDER + COLLECTION_NAME);
+        } catch (e) {
+            if (e.code != 'EEXIST') throw e;
+        }
+    })
+
     // Save the collection data for later use? as json
     .tap(function(data) {
-        var filename = config.DOWNLOAD_FOLDER + COLLECTION_NAME + '/' + helper.sanitizeFileName(data.name) + '.json',
+        var filename = config.DOWNLOAD_FOLDER + COLLECTION_NAME + '/____' + helper.sanitizeFileName(data.name) + '.json',
             data = JSON.stringify(data, null, "\t");
 
         fs.writeFileSync(filename, data);
@@ -56,22 +66,18 @@ Q(OLW_LINK)
     })
     .then(R.pluck('id'))
     .then(R.map(helper.getVideoUrlFromId))
+    // Download all video data by their IDs
     .then(R.map(rp))
     .all()
+    // Parse all the JSONs
     .then(R.map(JSON.parse))
-    .then(R.map(function(videoData) {
-        videoData.videoURL = helper.getVideoDownloadURLFromUUID(videoData.uuid);
-        return videoData;
-    }))
-    // Prepare the folder the files should be downloaded to
-    .tap(function() {
-        try {
-            fs.mkdirSync(config.DOWNLOAD_FOLDER + COLLECTION_NAME);
-        } catch (e) {
-            if (e.code != 'EEXIST') throw e;
-        }
-    })
+
+    // Just download the first 2 items
+    //.invoke('slice', 0, 2)
+
     .then(R.mapIndexed(function(videoData, index) {
+        videoData.videoURL = helper.getVideoDownloadURLFromUUID(videoData.uuid);
+
         var url = videoData.videoURL + '/1.mp4',
             filename = helper.getVideoFilename(COLLECTION_NAME, index, videoData.name);
 
@@ -80,15 +86,12 @@ Q(OLW_LINK)
         return videoData;
     }))
 
-    // Just download the first 2 items
-    //.invoke('slice', 0, 2)
-
     .then(R.map(function(videoData) {
         if (fs.existsSync(videoData.downloadFilename)) {
             console.log("--> already downloaded:", videoData.name, videoData.downloadFilename)
             return;
         }
-
+        // The videos get downloaded here!
         return rp(videoData.downloadURL, function(result) {
                 console.log("--> finished downloading:", videoData.name)
             })

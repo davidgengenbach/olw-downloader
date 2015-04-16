@@ -6,9 +6,10 @@ Usage:
 
 where [OLW_VIDEO_URL] has to be something like "https://openlearnware.tu-darmstadt.de/#!/collection/mathematik-ii-fur-informatik-und-wirtschaftsinformatik-3"
 
-# Known bugs (features)
+# TODOs
 * Sometimes videos aren't available in the "standard" quality... there should be a fallback mechanism (check for available quality)
 * Currently it downloads all the videos concurrently - which is sometimes not desired. should donwload them in batch by defined chunks
+* 'Frontend' should be maybe seperated from 'Backend' (Seperation of Concerns): currently one file does all the downloading, parsing, etc.
 
 # Flow
 * Gets a OLW link to a collection (a collection is something as https://openlearnware.tu-darmstadt.de/#!/collection/mathematik-ii-fur-informatik-und-wirtschaftsinformatik-3)
