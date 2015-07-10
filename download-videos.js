@@ -20,6 +20,7 @@ var VIDEO_DATA,
     COLLECTION_NAME,
     COLLECTION_DATA;
 
+// This is a fucking cool functional chain, yeah! Awesome! :D
 Q(OLW_LINK)
     // Get the index (the last number in the OLW_LINK)
     .then(helper.getCollectionIndexFromUrl)
